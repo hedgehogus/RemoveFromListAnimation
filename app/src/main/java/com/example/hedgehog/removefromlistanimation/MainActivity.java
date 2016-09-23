@@ -2,6 +2,7 @@ package com.example.hedgehog.removefromlistanimation;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -50,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(final View v, MotionEvent event) {
             if (mSwipeSlop < 0) {
-                mSwipeSlop = ViewConfiguration.get(MainActivity.this).
-                        getScaledTouchSlop();
+             //Distance in pixels a touch can wander before we think the user is scrolling
+               mSwipeSlop = ViewConfiguration.get(MainActivity.this).getScaledTouchSlop();
+             //   Log.d("asdf"," " + mSwipeSlop);
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -62,14 +64,10 @@ public class MainActivity extends AppCompatActivity {
                     mItemPressed = true;
                     mDownX = event.getX();
                     break;
-                case MotionEvent.ACTION_CANCEL:
-                    v.setAlpha(1);
-                    v.setTranslationX(0);
-                    mItemPressed = false;
-                    break;
                 case MotionEvent.ACTION_MOVE:
                 {
-                    float x = event.getX() + v.getTranslationX();
+                   // Log.d("asdf","event.getX() : " + event.getX() +" translation: " + v.getTranslationX());
+                    float x = event.getX() +  v.getTranslationX();
                     float deltaX = x - mDownX;
                     float deltaXAbs = Math.abs(deltaX);
                     if (!mSwiping) {
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 break;
+                case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
                 {
                     // User let go - figure out whether to animate the view out, or back into place
